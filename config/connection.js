@@ -11,18 +11,14 @@ if (process.env.DB_URL) {
   const dbPassword = process.env.DB_PASSWORD;
 
   if (!dbName || !dbUser || !dbPassword) {
-    console.error('Environment Variables:', {
-      DB_NAME: dbName,
-      DB_USER: dbUser,
-      DB_PASSWORD: dbPassword
-    });
-    throw new Error('Missing required environment variables: DB_NAME, DB_USER, or DB_PASSWORD');
+    console.error('Environment Variables are not set correctly');
+    process.exit(1);
   }
 
   sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     host: 'localhost',
     dialect: 'postgres',
-    port: 3003
+    port: 5432, // Default PostgreSQL port
   });
 }
 
