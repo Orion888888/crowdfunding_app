@@ -32,23 +32,22 @@ router.get('/post/:id', async (req, res) => {
     const postData = await Post.findByPk(req.params.id, {
       include: [
         {
-          model: User,
-          attributes: ['name'],
-        }, {
+          model: User
+        }, 
+        {
           model: Comment, 
-          attributes: ['user_id', 'content', 'date_created'],
           include: [{
-            model: User, 
-            attributes: ['username']
+            model: User,
           }]
         }
       ],
     });
 
     const post = postData.get({ plain: true });
+  ;
 
     res.render('post', {
-      ...post,
+      post,
       logged_in: req.session.logged_in
     });
   } catch (err) {
@@ -81,15 +80,10 @@ router.get('/dashboard', withAuth, async (req, res) => {
 
   router.get('/new', withAuth, async (req, res) => {
     try {
-      const userData = await User.findByPk(req.session.user_id, {
-        attributes: { exclude: ['password'] },
-        include: [{ model: Post }],
-      });
-  
-      const user = userData.get({ plain: true });
+    
   
       res.render('new', {
-        user,
+       
         logged_in: true
       });
     } catch (err) {
@@ -107,23 +101,21 @@ router.get('/dashboard', withAuth, async (req, res) => {
     res.render('login');
   }); 
   
-  router.get('/post/:id', async (req, res) => {
-    try {
-      const commentData = await Comment.findAll({
-        where: {post_id: req.params.id}
-      });
+  // router.get('/post/:id', async (req, res) => {
+  //   try {
+    
   
-      console.log(commentData);
-      const comment = commentData.get({ plain: true });
+  //     console.log(commentData);
+  //     const comment = commentData.get({ plain: true });
   
-      res.render('post', {
-        ...comment,
-        logged_in: req.session.logged_in
-      });
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
+  //     res.render('post', {
+  //       ...comment,
+  //       logged_in: req.session.logged_in
+  //     });
+  //   } catch (err) {
+  //     res.status(500).json(err);
+  //   }
+  // });
   
   
   router.get('/edit/:id', async (req, res) => {
